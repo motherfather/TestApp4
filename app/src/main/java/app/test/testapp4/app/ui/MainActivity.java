@@ -1,13 +1,12 @@
 package app.test.testapp4.app.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.List;
-
 import app.test.testapp4.R;
+import app.test.testapp4.app.core.service.ListService;
 import app.test.testapp4.app.ui.list.ListAsyncTask;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ListAsyncTask.init(this);
+        ListService.init(this);
 
         Button button = (Button)findViewById(R.id.button);
 
