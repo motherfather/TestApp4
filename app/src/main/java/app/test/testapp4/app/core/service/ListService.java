@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.Reader;
-import java.net.HttpURLConnection;
 import java.util.List;
 
 import app.test.testapp4.R;
@@ -19,8 +18,6 @@ import app.test.testapp4.app.core.domain.AdminShopVo;
 import app.test.testapp4.app.core.domain.SearchVo;
 import app.test.testapp4.app.core.domain.ShopVo;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
-
 /**
  * Created by BIT on 2017-01-16.
  */
@@ -28,7 +25,8 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 public class ListService {
     static Context mMain;
 
-    public static void init(Context main) { // MainActivity에서만 쓸 수 있는 findViewById를 쓰기 위해서 사용...
+    // MainActivity에서만 쓸 수 있는 findViewById를 쓰기 위해서 사용...
+    public static void init(Context main) {
         mMain = main;
     }
 
@@ -39,21 +37,28 @@ public class ListService {
 
         httpRequest.contentType(HttpRequest.CONTENT_TYPE_JSON); // 전달 타입
         httpRequest.accept(HttpRequest.CONTENT_TYPE_JSON); // 받을 타입
-        httpRequest.connectTimeout(3000); // 시간 경과시 보내기 끊기
-        httpRequest.readTimeout(3000); // 시간 경과시 읽어오기 끊기
+        httpRequest.connectTimeout(3000); // 웹과 접속을 하고 답변을 받는데 응답이 없으면 일정 시간 뒤에 끊긴다는 것
+        httpRequest.readTimeout(3000); // 일정 시간 동안 패킷이 없을 경우 끊긴다는 것
+        Log.d("나온값", toJSON());
 
-        Log.d("진짜", toJSON());
-//        httpRequest.form(toJSON());
+//        code(), ok()와 같은 메소드들은 첫 요청 이후 여러 번 재 호출해도 되지만
+//        body() 메소드는 한 번 호출 이후 재호출을 할 경우 IOException이 발생합니다.
+//        그러므로 테스트용으로 Log에서 body() 호출을 하면 실제 값을 불러올 때 가져오지 못하므로...
+//        테스트에서 값이 뜨는 것을 확인했으면 주석처리하고 실제 과정을 넘어가세요!!!
+//        Log.d("body() 여기서 호출했음", httpRequest.send(toJSON()).body()); ← 이거와 바로 밑 httpRequest.send(toJSON()); 을 동시에 못씁니다. 아시죠?
+        httpRequest.send(toJSON()); // 이미 Log.d("body() 여기서 호출했음", httpRequest.send(toJSON()).body()); 에서 body() 호출 했으므로 그 후로는 호출하면 IOException 뜹니다~~
 
-        int responseCode = httpRequest.code(); // 현재 연결상태에 따른 코드 불러오기 ex)접속성공시 200, 실패시 400, 404, 500 등...
-        if (responseCode != HttpURLConnection.HTTP_OK) { // HTTP_OK 가 코드가 200
-            throw new RuntimeException("Http Response : " + responseCode); // 연결 실패시 런타입익셉션
-        }
+
+//        지금으로써는 불가능함...
+//        저 url은 입력 파라미터 없이는 접근할 수 없으므로... 코드가 접속성공코드인 200이 뜨지를 못함... 그래서 어플이 작동을 멈추므로... 지금은 사용할 수 없다...
+//        int responseCode = httpRequest.code(); // 현재 연결상태에 따른 코드 불러오기 ex)접속성공시 200, 실패시 400, 404, 500 등...
+//        if (responseCode != HttpURLConnection.HTTP_OK) { // HTTP_OK 가 코드가 200
+//            throw new RuntimeException("Http Response : " + responseCode); // 연결 실패시 런타입익셉션
+//        }
 
         JSONResultList jsonResultList = fromJSON(httpRequest, JSONResultList.class); // JSONResultList타입의 JSON 데이터 httpReques를 객체로 변경
 
         List<ShopVo> list = jsonResultList.getData().getList(); // 서버에서 받은 데이터에서 리스트만 뽑아냄
-
 
         return list;
     }
@@ -65,22 +70,23 @@ public class ListService {
 //        UserVo가 id 와 password로 이루어졌다면 JSONResult< > 안은 List<UserVo> 라고 써야 한다!!!
     }
 
-    // GSON 쓰기 위해서
+    // 서버에서 받아온 json값을 객체로 변환하기 위해서...
     protected <V> V fromJSON(HttpRequest httpRequest, Class<V> target) { // httpRequest ← 서버에서 받아온 값, target ← 서버에서 받아온 값에서 필요한 값만 꺼내기 위해서... Class<V> ← 필요한 값의 형태?!
         V v = null;
         try {
             Gson gson = new GsonBuilder().create(); // GSON 생성
 
             Reader reader = httpRequest.bufferedReader(); // url에서 값 가져오기
-            v = gson.fromJson(reader, target); // url에서 읽어온 json값 객체로 변경
+            v = gson.fromJson(reader, target); // url에서 읽어온 json값 객체로 변환
             reader.close(); // reader 닫음
 
         } catch (Exception e) { // 어떤 Exception이라도 일어날 경우...
             throw new RuntimeException(e); // RuntimeException을 일으킨다
         }
-        return v; // json에서 객체로 변경된 값 리턴
+        return v; // json에서 객체로 변환된 값 리턴
     }
 
+    // 어플에서 받은 객체를 json으로 만들기 위해서...
     protected String toJSON() {
         String json = "";
         try {

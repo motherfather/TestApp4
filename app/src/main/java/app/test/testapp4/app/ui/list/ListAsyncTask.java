@@ -15,9 +15,6 @@ import app.test.testapp4.app.core.service.ListService;
  * Created by BIT on 2017-01-16.
  */
 
-/**
- * 서버로 부터 JSON형식의 LIST를 가져오는 Ajax 비동기 통신을 하는 AsyncTask 클래스
- */
 public class ListAsyncTask {
     private ListService listService = new ListService();
     static Context mMain;
@@ -27,9 +24,12 @@ public class ListAsyncTask {
     }
 
     public void start() {
-        new ListAsync().execute(); // ListAsync 작동
+        new ListAsync().execute(); // ListAsync 작동 (실제로 접속을 시킨다는 것)
     }
 
+    /**
+    * 서버로 부터 JSON형식의 LIST를 가져오는 Ajax 비동기 통신을 하는 AsyncTask 클래스
+    */
     private class ListAsync extends SafeAsyncTask<List<ShopVo>> {
         @Override
         public List<ShopVo> call() throws Exception {
@@ -39,7 +39,7 @@ public class ListAsyncTask {
             return list;
         }
 
-        //    Exception 발생시...
+//        Exception 발생시...
         @Override
         protected void onException(Exception e) throws RuntimeException {
 //        super.onException(e);
