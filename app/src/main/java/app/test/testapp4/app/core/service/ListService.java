@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.Reader;
+import java.net.HttpURLConnection;
 import java.util.List;
 
 import app.test.testapp4.R;
@@ -51,10 +52,11 @@ public class ListService {
 
 //        지금으로써는 불가능함...
 //        저 url은 입력 파라미터 없이는 접근할 수 없으므로... 코드가 접속성공코드인 200이 뜨지를 못함... 그래서 어플이 작동을 멈추므로... 지금은 사용할 수 없다...
-//        int responseCode = httpRequest.code(); // 현재 연결상태에 따른 코드 불러오기 ex)접속성공시 200, 실패시 400, 404, 500 등...
-//        if (responseCode != HttpURLConnection.HTTP_OK) { // HTTP_OK 가 코드가 200
-//            throw new RuntimeException("Http Response : " + responseCode); // 연결 실패시 런타입익셉션
-//        }
+        int responseCode = httpRequest.code(); // 현재 연결상태에 따른 코드 불러오기 ex)접속성공시 200, 실패시 400, 404, 500 등...
+        Log.d("responseCode", String.valueOf(responseCode));
+        if (responseCode != HttpURLConnection.HTTP_OK) { // HTTP_OK 가 코드가 200
+            throw new RuntimeException("Http Response : " + responseCode); // 연결 실패시 런타입익셉션
+        }
 
         JSONResultList jsonResultList = fromJSON(httpRequest, JSONResultList.class); // JSONResultList타입의 JSON 데이터 httpReques를 객체로 변경
 

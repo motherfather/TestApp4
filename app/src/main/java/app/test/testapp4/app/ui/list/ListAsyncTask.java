@@ -25,6 +25,7 @@ public class ListAsyncTask {
 
     public void start() {
         new ListAsync().execute(); // ListAsync 작동 (실제로 접속을 시킨다는 것)
+
     }
 
     /**
