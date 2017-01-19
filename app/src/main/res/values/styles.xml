@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Modeal theme -->
+    <style name="ModealTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/ModealActionBar</item>
+    </style>
+
+    <!-- Modeal ActionbBar -->
+    <style name="ModealActionBar" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="background">@color/colorModeal</item>
+    </style>
+
 </resources>
