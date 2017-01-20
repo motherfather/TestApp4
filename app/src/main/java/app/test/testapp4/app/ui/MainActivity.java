@@ -2,8 +2,12 @@ package app.test.testapp4.app.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
@@ -90,4 +94,20 @@ public class MainActivity extends AppCompatActivity {
         Log.w("거부된 권한", AccessToken.getCurrentAccessToken().getDeclinedPermissions().toString());
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportActionBar().setDisplayShowCustomEnabled(true); // Custom Actionbar를 사용하겠다!!
+
+//        LayoutInflater layoutInflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE); // inflater 얻어오기
+//        View actionbar = layoutInflater.inflate(R.layout.custom_actionbar, null); // xml(설계도)의 view를 실제 view객체로 만드는 역할
+
+        View actionbar = View.inflate(this, R.layout.custom_actionbar, null); // 위에 두줄을 한줄로 줄인것
+
+        getSupportActionBar().setCustomView(actionbar); // 가져온 view를 화면에 표시
+
+        ((Toolbar)actionbar.getParent()).setContentInsetsAbsolute(0, 0); // 액션바 위치 지정(좌우 여백을 없애기 위해서)
+
+        return true;
+
+    }
 }

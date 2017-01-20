@@ -9,6 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
     tools:context="app.test.testapp4.app.ui.MainActivity">
 
     <Button

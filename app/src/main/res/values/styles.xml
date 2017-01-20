@@ -10,12 +10,13 @@
 
     <!-- Modeal theme -->
     <style name="ModealTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="actionBarStyle">@style/ModealActionBar</item>
+        <item name="actionBarStyle">@style/ModealActionBar</item> <!-- 액션바 스타일 -->
+        <item name="actionBarSize">40dp</item> <!-- 액션바의 높이 -->
     </style>
 
     <!-- Modeal ActionbBar -->
     <style name="ModealActionBar" parent="Widget.AppCompat.Light.ActionBar">
-        <item name="background">@color/colorModeal</item>
+        <item name="background">@color/colorModeal</item> <!-- 액션바 색상 -->
     </style>
 
 </resources>
